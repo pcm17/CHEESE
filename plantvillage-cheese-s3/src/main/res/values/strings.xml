@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Cheese!</string>
+    <string name="meal_or_plate">Select Meal or Plate</string>
+    <string name="plate_food_select_name">Select Recipe to Add</string>
+    <string name="plate_food_same_portion_select_name">Select Recipes to Add with Same Portions</string>
+    <string name="edit_recipe_same_portion">Select the Recipe to Edit</string>
+
+    <string name="select_portion_size">Select Portion Size</string>
+    <string name="select_same_portion_size">Select Portion Size For All Recipes</string>
+
+    <string name="list_foods_add_more_or_capture">Add Recipe or Take Photos</string>
+
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="spinner_prompt">Select Personal ID</string>
+
+    <string-array name="personal_id_spinner">
+        <item>Select Personal ID... </item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+    </string-array>
+
+</resources>
