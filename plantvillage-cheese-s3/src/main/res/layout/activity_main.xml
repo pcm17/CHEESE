@@ -20,11 +20,7 @@
 
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,58 +33,21 @@
             android:background="@drawable/rounded_corners_white_light_blue"
 
             android:layout_weight="1"
-            android:text="Individual Meal\n\n Same Portions" />
+            android:text="Individual Meal\nSame Portions" />
 
-        <Button
-            android:id="@+id/btn_family_meal_same_portions"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corners_white"
-            android:text="Family Meal \n\n Same Portions" />
             <Button
-                android:id="@+id/btn_plate_same_portions"
+                android:id="@+id/btn_meal_individual"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_corners_white_dark_blue"
-                android:text="Family Plate" />
-        </LinearLayout>
-
+                android:background="@drawable/rounded_corners_dark_blue"
+                android:text="Individual Meal" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-
-        <Button
-            android:id="@+id/btn_meal_individual"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/rounded_corners_lighter_blue_fade"
-
-            android:layout_weight="1"
-            android:text="Individual Meal" />
-
-        <Button
-            android:id="@+id/btn_meal_family"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corners_blue_fade"
-            android:text="Family Meal"
-            />
-            <Button
-                android:id="@+id/btn_plate"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corners_dark_blue"
-                android:text="Individual Plate"
-                android:textColor="#E2E0E0" />
-        </LinearLayout>
+            android:orientation="vertical"/>
     </LinearLayout>
 
 

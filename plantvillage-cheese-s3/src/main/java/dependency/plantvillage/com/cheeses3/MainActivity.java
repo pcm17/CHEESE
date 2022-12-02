@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         userID = intent.getIntExtra("userID", 0);
 
         btn_meal_individual = (Button) findViewById(R.id.btn_meal_individual);
-        btn_meal_family = (Button) findViewById(R.id.btn_meal_family);
-        btn_plate = (Button) findViewById(R.id.btn_plate);
+        //btn_meal_family = (Button) findViewById(R.id.btn_meal_family);
+        //btn_plate = (Button) findViewById(R.id.btn_plate);
         btn_individual_meal_same_portions = (Button) findViewById(R.id.btn_individual_meal_same_portions);
-        btn_family_meal_same_portions = (Button) findViewById(R.id.btn_family_meal_same_portions);
-        btn_plate_same_portions = (Button) findViewById(R.id.btn_plate_same_portions);
+        //btn_family_meal_same_portions = (Button) findViewById(R.id.btn_family_meal_same_portions);
+        //btn_plate_same_portions = (Button) findViewById(R.id.btn_plate_same_portions);
 
 
 
@@ -65,6 +65,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
+
+        btn_individual_meal_same_portions.setOnClickListener(new View.OnClickListener() { // individual meal
+            @Override
+            public void onClick(View view) {
+                if (userID != 0) {
+
+                    nextActivity(view, 2, 1, "IM");
+                } else {
+                    Toast.makeText(MainActivity.this, "Please select a personal ID number...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        /*
         btn_meal_family.setOnClickListener(new View.OnClickListener() { // family meal
             @Override
             public void onClick(View view) {
@@ -89,17 +102,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         });
 
-        btn_individual_meal_same_portions.setOnClickListener(new View.OnClickListener() { // individual meal
-            @Override
-            public void onClick(View view) {
-                if (userID != 0) {
-
-                    nextActivity(view, 2, 1, "IM");
-                } else {
-                    Toast.makeText(MainActivity.this, "Please select a personal ID number...", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         btn_family_meal_same_portions.setOnClickListener(new View.OnClickListener() { // family meal
             @Override
             public void onClick(View view) {
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
         });
+         */
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -137,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
     }
-
-
 
     public void nextActivity(View view, int picType, int isSamePortion, String dishType) {
        // Toast.makeText(getApplicationContext(),"picType = " + picType, Toast.LENGTH_SHORT).show();
