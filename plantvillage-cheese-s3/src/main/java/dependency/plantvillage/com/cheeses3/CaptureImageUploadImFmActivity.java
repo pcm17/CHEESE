@@ -277,6 +277,8 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         portion_list.add(portion_list.get(0));
         portion_id_list.add(portion_id_list.get(0));
 
+        // update portion id in filename
+        filename = filename.replace("1000",Integer.toString(portion_id_list.get(0)));
         Intent intent = new Intent(this, SelectRecipeActivity.class);
 
         intent.putExtra("portion_list", portion_list);
@@ -307,6 +309,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         String thisDate = currentDate.format(todayDate);
         filename = angle + '_' + thisDate  + "_" + baseFilename;
         filename = filename + userID +  ".jpg";
+        filename = filename.replace("__","_");
         return filename;
     }
 
@@ -343,60 +346,6 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
 
         Log.d("PV", file.getAbsolutePath() + " " + file.getName());
 
-        /*
-        String output = new Random().nextInt() + file.getName();
-        final String s3Name;
-        final String bucketName;
-
-
-        bucketName = "nudging/food_atlas/ghana";
-        s3Name = "https://s3.amazonaws.com/nudging/food_atlas/ghana/"+output;
-
-
-        final TransferObserver observer = transferUtility.upload(
-                bucketName,
-                output,
-                file
-        );
-
-
-
-
-
-        observer.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-
-                if (state.COMPLETED.equals(observer.getState())) {
-                    //num_pics = num_pics + 1;
-                    Toast.makeText(MainActivity.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
-                    new MainActivity.LongOperation().execute(s3Name);
-
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                //Toast.makeText(MainActivity.this, "In Progress Changed", Toast.LENGTH_SHORT).show();
-
-                long _bytesCurrent = bytesCurrent;
-                long _bytesTotal = bytesTotal;
-
-                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
-                Log.d("percentage", "" + percentage);
-                pb.setProgress((int) percentage);
-                _status.setText(percentage + "%");
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-
-                Toast.makeText(MainActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        observer.refresh();
-        */
 
 
     }
@@ -426,9 +375,9 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
                     public void onClick(DialogInterface arg0, int arg1) {
 
                         Intent intent = new Intent(
-                                MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                                MediaStore.ACTION_IMAGE_CAPTURE);
                         File f = new File(android.os.Environment
-                                .getExternalStorageDirectory(), "temp.jpg");
+                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "temp.jpg");
                         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                                 Uri.fromFile(f));
                         System.out.println("Before Camera Request");
@@ -454,7 +403,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
 
-            File f = new File(Environment.getExternalStorageDirectory()
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                     .toString());
             for (File temp : f.listFiles()) {
                 if (temp.getName().equals("temp.jpg")) {
@@ -475,10 +424,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
                 System.out.println("Trying to get bitmap");
 
                 File file = new File(f.getAbsolutePath());
-                ImageDecoder.Source source = ImageDecoder.createSource(file);
-                bitmap = ImageDecoder.decodeBitmap(source);
-
-                //bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+                bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 //bitmap = Bitmap.createBitmap(bitmap);
 
                 int rotate = 0;
@@ -519,9 +465,8 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
             if (data != null) {
 
                 Uri selectedImageUri = data.getData();
-               
+
                 try {
-                    //bitmap = ImageDecoder.decodeBitmap(source);
                     bitmap
                             = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(),
@@ -530,9 +475,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
                     System.out.println("ERROR DECODING DRAWABLE BEFORE SAVE");
                     e.printStackTrace();
                 }
-                //bitmap = BitmapFactory.decodeFile(selectedImagePath); // loses exifdata?
-                // preview image
-                //bitmap = Bitmap.createBitmap(bitmap);
+
                 System.out.println("INSIDE IMFM ACTIVITY BEFORE SAVE TO SD CARD");
                 System.out.println("Saving file without storeImageTosdCard function");
                 storeImageTosdCard(bitmap);
