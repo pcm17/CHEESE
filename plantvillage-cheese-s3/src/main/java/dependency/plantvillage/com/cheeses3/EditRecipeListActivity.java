@@ -670,7 +670,9 @@ public class EditRecipeListActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
 
                         String[] recipe_portion_codes = filename.split("_");
+
                         for (int i = 0; i < recipe_portion_codes.length; i++) {
+                            try{
                             String recipe_portion_code = recipe_portion_codes[i];
                             Integer portionID = Integer.parseInt(recipe_portion_code.split("-")[1]);
                             Integer recipeCode =Integer.parseInt(recipe_portion_code.split("-")[0]);
@@ -683,7 +685,12 @@ public class EditRecipeListActivity extends AppCompatActivity {
                                 System.out.println("Found recipe portion combo!!");
                                 String recipe_portion_combo = (recipeCodeString + "-" + portionIDString);
                                 System.out.println(recipe_portion_combo);
-                                filename = filename.replace(recipe_portion_combo,"");
+                                filename = filename.replaceFirst(recipe_portion_combo,"");
+                                break;
+                            }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
                             }
                         }
                         System.out.println("filename AFTER UPDATE = " + filename);
