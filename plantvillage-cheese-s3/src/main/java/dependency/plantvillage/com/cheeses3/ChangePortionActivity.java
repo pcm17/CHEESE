@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
+public class ChangePortionActivity extends AppCompatActivity {
     Button btn_small;
     Button btn_medium;
     Button btn_large;
@@ -27,8 +27,12 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
     String FROM_ACTIVITY;
     String dishType;
     ArrayList<String> recipeCodeList;
+    ArrayList<String> recipeNameList;
+
     String filename;
     int portionID;
+    int numFoodsInRecipe;
+
 
 
     @Override
@@ -48,12 +52,12 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
         recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
         filename = intent.getStringExtra("filename");
         portionID = intent.getIntExtra("portion_id", 0);
+        recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+        numFoodsInRecipe = intent.getIntExtra("numFoodsInRecipe", 1);
 
         if (recipeCodeList == null) {
             recipeCodeList = new ArrayList<String>();
         }
-
-
 
         btn_small = (Button) findViewById(R.id.btn_small);
         btn_medium = (Button) findViewById(R.id.btn_medium);
@@ -66,14 +70,9 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
                 System.out.println("Old portion ID = " + portionID);
                 portion_size = "Small";
                 portion_id = 1;
-                //Toast.makeText(SelectPlatePortionSizeActivity.this, portion_size  + " Portion of " + food_name + " added", Toast.LENGTH_SHORT).show();
-                if (FROM_ACTIVITY.equals("CAPTURE")){
-                    filename = filename.replace("-"+Integer.toString(portionID)+"-","-"+Integer.toString(portion_id)+"-");
-                    selectAddFoodCapture(view);
-                }
-                else {
-                    selectAddRecipe(view);
-                }
+                filename = filename.replace("-"+Integer.toString(portionID),"-"+Integer.toString(portion_id));
+                selectAddFoodCapture(view);
+
             }
 
         });
@@ -83,14 +82,9 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
                 System.out.println("Old portion ID = " + portionID);
                 portion_size = "Medium";
                 portion_id = 2;
-                //Toast.makeText(SelectPlatePortionSizeActivity.this, portion_size +" Portion of " + food_name + " added", Toast.LENGTH_SHORT).show();
-                if (FROM_ACTIVITY.equals("CAPTURE")){
-                    filename = filename.replace("-"+Integer.toString(portionID)+"-","-"+Integer.toString(portion_id)+"-");
-                    selectAddFoodCapture(view);
-                }
-                else {
-                    selectAddRecipe(view);
-                }
+                filename = filename.replace("-"+Integer.toString(portionID),"-"+Integer.toString(portion_id));
+                selectAddFoodCapture(view);
+
             }
 
         });
@@ -101,15 +95,10 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
 
                 portion_size = "Large";
                 portion_id = 3;
-                //Toast.makeText(SelectPlatePortionSizeActivity.this, portion_size + " Portion of " + food_name + " added", Toast.LENGTH_SHORT).show();
-                if (FROM_ACTIVITY.equals("CAPTURE")){
-                    filename = filename.replace("-"+Integer.toString(portionID)+"-","-"+Integer.toString(portion_id)+"-");
-                    selectAddFoodCapture(view);
 
-                }
-                else {
-                    selectAddRecipe(view);
-                }
+                filename = filename.replace("-"+Integer.toString(portionID),"-"+Integer.toString(portion_id));
+                selectAddFoodCapture(view);
+
             }
 
         });
@@ -119,14 +108,10 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
                 System.out.println("Old portion ID = " + portionID);
                 portion_size = "Extra Large";
                 portion_id = 4;
-                //Toast.makeText(SelectPlatePortionSizeActivity.this, portion_size  +" Portion of " + food_name + " added", Toast.LENGTH_SHORT).show();
-                if (FROM_ACTIVITY.equals("CAPTURE")){
-                    filename = filename.replace("-"+Integer.toString(portionID)+"-","-"+Integer.toString(portion_id)+"-");
-                    selectAddFoodCapture(view);
-                }
-                else {
-                    selectAddRecipe(view);
-                }
+
+                filename = filename.replace("-"+Integer.toString(portionID),"-"+Integer.toString(portion_id));
+                selectAddFoodCapture(view);
+
             }
 
         });
@@ -136,21 +121,14 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
 
     public void selectAddFoodCapture(View view) {
         Intent intent;
-        if(dishType.equals("IM") || dishType.equals("FM")) {
-            intent = new Intent(this, CaptureImageUploadSamePortionsImFmActivity.class);
-        } else if (dishType.equals("IP")) {
-            intent = new Intent(this, CaptureImageUploadActivity.class);
-        }
-        else {
-            intent = new Intent(this, CaptureImageUploadSamePortionsActivity.class);
-        }        portion_list.clear();
+        intent = new Intent(this, CaptureImageUploadImFmActivity.class);
+
+        portion_list.clear();
         portion_id_list.clear();
-        for (int i = 0; i<food_list.size();i++) {
+        for (int i = 0; i<recipeCodeList.size();i++) {
             portion_list.add(portion_size);
             portion_id_list.add(portion_id);
         }
-        intent.putExtra("food_list", food_list);
-        intent.putExtra("food_id_list", food_id_list);
         intent.putExtra("portion_id_list", portion_id_list);
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("picType", picType);
@@ -159,40 +137,14 @@ public class SelectPlateSamePortionSizeActivity extends AppCompatActivity {
         intent.putExtra("portion_size", portion_size);
         intent.putExtra("dishType", dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
+        intent.putExtra("recipeNameList", recipeNameList);
+        intent.putExtra("numFoodsInRecipe", numFoodsInRecipe);
+
         intent.putExtra("filename",filename);
 
         startActivity(intent);
     }
 
-    public void selectAddRecipe(View view) {
-        Intent intent = new Intent(this, SelectRecipeSamePortionActivity.class);
-        portion_list.add(portion_size);
-        portion_id_list.add(portion_id);
-        intent.putExtra("food_list", food_list);
-        intent.putExtra("food_id_list", food_id_list);
-        intent.putExtra("portion_id_list", portion_id_list);
-        intent.putExtra("portion_list", portion_list);
-        intent.putExtra("picType", picType);
-        intent.putExtra("userID", userID);
-        intent.putExtra("portion_id", portion_id);
-        intent.putExtra("portion_size", portion_size);
-        intent.putExtra("dishType", dishType);
-        intent.putExtra("recipeCodeList", recipeCodeList);
-        intent.putExtra("filename",filename);
 
-
-        startActivity(intent);
-    }
-/*
-    public void undoAddFood(View view) {
-        Intent intent = new Intent(this, SelectFoodActivity.class);
-        food_list.remove(food_name);
-        intent.putExtra("food_list", food_list);
-        intent.putExtra("food_id_list", food_id_list);
-        intent.putExtra("portion_list", portion_list);
-        startActivity(intent);
-    }
-
- */
 
 }

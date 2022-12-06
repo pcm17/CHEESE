@@ -198,8 +198,11 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         btn_change_portion_keep_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(CaptureImageUploadImFmActivity.this, "Change portion for different portions has not been implemented yet.", Toast.LENGTH_SHORT).show();
+                if (isSamePortions == 1) {
+                    changePortionKeepFood(view);
+                } else{
+                    Toast.makeText(CaptureImageUploadImFmActivity.this, "Change portion for different portions has not been implemented yet.", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -277,6 +280,27 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void changePortionKeepFood(View view) {
+        Intent intent;
+
+        intent = new Intent(this, ChangePortionActivity.class);
+
+        intent.putExtra("portion_list", portion_list);
+        intent.putExtra("portion_id_list", portion_id_list);
+        intent.putExtra("picType", picType);
+        intent.putExtra("userID", userID);
+        intent.putExtra("portion_size", portion_size);
+        intent.putExtra("portion_id", portionID);
+        intent.putExtra("FROM_ACTIVITY", "CAPTURE");
+        intent.putExtra("dishType",dishType);
+        intent.putExtra("recipeCodeList", recipeCodeList);
+        intent.putExtra("filename",filename);
+        intent.putExtra("isSamePortions", isSamePortions);
+        intent.putExtra("recipeNameList", recipeNameList);
+
+
+        startActivity(intent);
+    }
     public void startOver(int userID) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("userID", userID);
