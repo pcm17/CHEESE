@@ -63,24 +63,13 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 public class CaptureImageUploadImFmActivity extends AppCompatActivity {
-
-    String key = "AKIAR5SR7XGQJFT2JFXB";
-    String secret = "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";
-
-    BasicAWSCredentials credentials;
-
-
-    AmazonS3Client s3;
-
-    TransferUtility transferUtility;
-
     ProgressBar pb;
     Button btn_45_photo, btn_90_photo, btn_more_food, btn_new_dish, btn_change_portion_keep_food, btn_change_food_keep_portion, btn_save;
     String portion_size;
 
 
     TextView _status;
-    ImageView imageView, imageView2;
+
 
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_PICTURE = 1;
@@ -90,7 +79,6 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     ArrayList<String> portion_list;
     ArrayList<Integer> unsorted_food_id_list;
 
-    ArrayList<Integer> sorted_food_id_list;
     ArrayList<Integer> portion_id_list;
     String selectedImagePath;
     int picType;
@@ -307,43 +295,6 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         return filename;
     }
 
-    private void processImageByPath(String path){
-
-        credentials = new BasicAWSCredentials(key, secret);
-        s3 = new AmazonS3Client(credentials);
-        //s3.setEndpoint("http://localhost:9444/s3");
-        //s3.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).disableChunkedEncoding().build());
-        //s3.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).d);
-        transferUtility = new TransferUtility(s3, CaptureImageUploadImFmActivity.this);
-
-        String myJpgPath = path;
-
-
-        Bitmap myBitmap = BitmapFactory.decodeFile(myJpgPath);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        //myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        //byte[] byteArray = stream.toByteArray();
-
-
-
-        Log.d("PV", myJpgPath);
-
-        File file = new File(myJpgPath);
-
-        //File file1 = new File(myJpgPath);
-
-        if (!file.exists()) {
-            Toast.makeText(CaptureImageUploadImFmActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-        Log.d("PV", file.getAbsolutePath() + " " + file.getName());
-
-
-
-    }
-
     private void startDialog() {
         AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
                 this);
@@ -518,180 +469,9 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         Toast.makeText(CaptureImageUploadImFmActivity.this, "Image Saved",Toast.LENGTH_LONG).show();
 
     }
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        public DownloadImageTask(ImageView bmImage) {
-            imageView = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            imageView2.setImageBitmap(result);
-        }
-    }
-
-    private class LongOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-
-                URL url = new URL("http://107.21.9.12/upload");
-
-                JSONObject postDataParams = new JSONObject();
-                postDataParams.put("myfile", params[0]);
-                Log.e("params", postDataParams.toString());
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode = conn.getResponseCode();
-
-                if (false || responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    BufferedReader in = new BufferedReader(
-                            new InputStreamReader(
-                                    conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer("");
-                    String line = "";
-
-                    while ((line = in.readLine()) != null) {
-
-                        sb.append(line);
-                        break;
-                    }
-
-                    in.close();
-                    return sb.toString();
-
-                } else {
-                    return new String("false : " + responseCode);
-                }
-            } catch (Exception e) {
-                return new String("Exception: " + e.getMessage());
-            }
-
-        }
-
-        public String getPostDataString(JSONObject params) throws Exception {
-
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-
-            Iterator<String> itr = params.keys();
-
-            while(itr.hasNext()){
-
-                String key= itr.next();
-                Object value = params.get(key);
-
-                if (first)
-                    first = false;
-                else
-                    result.append("&");
-
-                result.append(URLEncoder.encode(key, "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(value.toString(), "UTF-8"));
 
 
 
-            }
-            return result.toString();
-        }
-
-        public String getoutputString(JSONObject params) throws Exception {
-
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-
-            Iterator<String> itr = params.keys();
-
-            while(itr.hasNext()){
-
-                String key= itr.next();
-                Object value = params.get(key);
-
-                if (first)
-                    first = false;
-                else
-                    result.append("&");
-
-                result.append(URLEncoder.encode(key, "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-                return value.toString();
-
-
-            }
-            return result.toString();
-        }
-
-
-    @Override
-    protected void onPostExecute(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            String url1 = getoutputString(jsonObject);
-            new CaptureImageUploadImFmActivity.DownloadImageTask(imageView).execute(url1);
-            URL url = null;
-            try {
-                url = new URL(url1);
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d("PV", result);
-
-
-
-
-    }
-
-    @Override
-    protected void onPreExecute() {
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... values) {
-    }
-}
 
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
