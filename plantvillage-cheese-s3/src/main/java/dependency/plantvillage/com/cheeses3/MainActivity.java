@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    Button btn_meal_individual, btn_meal_family,btn_individual_meal_same_portions, btn_family_meal_same_portions, btn_plate_same_portions;
+    Button btn_meal, btn_meal_family, btn_meal_same_portions, btn_family_meal_same_portions, btn_plate_same_portions;
 
     Button btn_plate;
     ArrayList<String> food_list = new ArrayList<String>();
@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         userID = intent.getIntExtra("userID", 0);
 
-        btn_meal_individual = (Button) findViewById(R.id.btn_meal_individual);
+        btn_meal = (Button) findViewById(R.id.btn_meal);
         //btn_meal_family = (Button) findViewById(R.id.btn_meal_family);
         //btn_plate = (Button) findViewById(R.id.btn_plate);
-        btn_individual_meal_same_portions = (Button) findViewById(R.id.btn_individual_meal_same_portions);
+        btn_meal_same_portions = (Button) findViewById(R.id.btn_meal_same_portions);
         //btn_family_meal_same_portions = (Button) findViewById(R.id.btn_family_meal_same_portions);
         //btn_plate_same_portions = (Button) findViewById(R.id.btn_plate_same_portions);
 
@@ -55,77 +55,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         spinner.setSelection(selectedPosition);
 
-        btn_meal_individual.setOnClickListener(new View.OnClickListener() { // individual meal
+        btn_meal.setOnClickListener(new View.OnClickListener() { // individual meal
             @Override
             public void onClick(View view) {
                 if (userID != 0) {
-                    nextActivity(view, 2, 0, "IM");
+                    nextActivity(view,0);
                 } else {
                     Toast.makeText(MainActivity.this, "Please select a person ID number", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        btn_individual_meal_same_portions.setOnClickListener(new View.OnClickListener() { // individual meal
+        btn_meal_same_portions.setOnClickListener(new View.OnClickListener() { // individual meal
             @Override
             public void onClick(View view) {
                 if (userID != 0) {
 
-                    nextActivity(view, 2, 1, "IM");
+                    nextActivity(view,  1);
                 } else {
                     Toast.makeText(MainActivity.this, "Please select a personal ID number...", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        /*
-        btn_meal_family.setOnClickListener(new View.OnClickListener() { // family meal
-            @Override
-            public void onClick(View view) {
-                if (userID != 0) {
-                    nextActivity(view, 0, 0, "FM");
-                } else {
-                        Toast.makeText(MainActivity.this, "Please select a personal ID number..", Toast.LENGTH_SHORT).show();
-                    }
-            }
-        });
 
-        btn_plate.setOnClickListener(new View.OnClickListener() { // plate
-            @Override
-            public void onClick(View view) {
-                if (userID != 0) {
-                    nextActivity(view, 1, 0, "IP");
-                } else {
-                    Toast.makeText(MainActivity.this, "Please select a personal ID number...", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-        });
-
-        btn_family_meal_same_portions.setOnClickListener(new View.OnClickListener() { // family meal
-            @Override
-            public void onClick(View view) {
-                if (userID != 0) {
-                    nextActivity(view, 0, 1, "FM");
-                } else {
-                    Toast.makeText(MainActivity.this, "Please select a person ID number", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        btn_plate_same_portions.setOnClickListener(new View.OnClickListener() { // plate
-            @Override
-            public void onClick(View view) {
-                if (userID != 0) {
-                    nextActivity(view, 1, 1, "FP");
-                } else {
-                    Toast.makeText(MainActivity.this, "Please select a person ID number", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-        });
-         */
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -141,30 +93,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    public void nextActivity(View view, int picType, int isSamePortion, String dishType) {
+    public void nextActivity(View view, int isSamePortion) {
        // Toast.makeText(getApplicationContext(),"picType = " + picType, Toast.LENGTH_SHORT).show();
         Intent intent;
 
         if (isSamePortion == 0) { // not same portion sizes
                 intent = new Intent(this, SelectRecipeActivity.class);
         } else { // same portion sizes
-            if (picType == 2) {
-                intent = new Intent(this, SelectPlateSamePortionSizeActivity.class);
-            } else {
-                intent = new Intent(this, SelectMealSamePortionSizeActivity.class);
+                intent = new Intent(this, SelectPortionSizeActivity.class);
 
-            }
         }
 
         intent.putExtra("food_list", food_list);
         intent.putExtra("food_id_list", food_id_list);
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
-        intent.putExtra("picType", picType);
+        intent.putExtra("isSamePortion", isSamePortion);
         intent.putExtra("userID", userID);
         intent.putExtra("FROM_ACTIVITY", "MAIN");
-        intent.putExtra("dishType", dishType);
         intent.putExtra("filename",filename);
+
         startActivityForResult(intent, 1);
     }
 
