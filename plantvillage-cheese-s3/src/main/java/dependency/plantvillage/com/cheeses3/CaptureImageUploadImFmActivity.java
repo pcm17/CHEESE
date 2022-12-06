@@ -264,7 +264,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         intent.putExtra("dishType",dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("recipeNameList", recipeNameList);
-        intent.putExtra("isSamePortion", isSamePortions);
+        intent.putExtra("isSamePortions", isSamePortions);
 
         intent.putExtra("filename",filename);
         System.out.println("before edit recipe activity. recipeNameList = " + recipeNameList);
@@ -272,15 +272,9 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     }
 
     public void selectFood(View view) {
-        // add extra portion and id for new recipe about to be selected. Extra portion is the same as the 1st one selected cause its same portions
 
-        portion_list.add(portion_list.get(0));
-        portion_id_list.add(portion_id_list.get(0));
-
-        // update portion id in filename
-        filename = filename.replace("1000",Integer.toString(portion_id_list.get(0)));
         Intent intent = new Intent(this, SelectRecipeActivity.class);
-
+        System.out.println("CAPTURE IsSamePortions = " + isSamePortions);
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
         intent.putExtra("picType", picType);
@@ -289,7 +283,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("filename",filename);
         intent.putExtra("recipeNameList", recipeNameList);
-        intent.putExtra("isSamePortion", isSamePortions);
+        intent.putExtra("isSamePortions", isSamePortions);
         intent.putExtra("FROM_ACTIVITY", "CAPTURE");
 
         startActivity(intent);

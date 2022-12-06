@@ -93,11 +93,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    public void nextActivity(View view, int isSamePortion) {
+    public void nextActivity(View view, int isSamePortions) {
        // Toast.makeText(getApplicationContext(),"picType = " + picType, Toast.LENGTH_SHORT).show();
         Intent intent;
 
-        if (isSamePortion == 0) { // not same portion sizes
+        if (isSamePortions == 0) { // not same portion sizes
                 intent = new Intent(this, SelectRecipeActivity.class);
         } else { // same portion sizes
                 intent = new Intent(this, SelectPortionSizeActivity.class);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra("food_id_list", food_id_list);
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
-        intent.putExtra("isSamePortion", isSamePortion);
+        intent.putExtra("isSamePortions", isSamePortions);
         intent.putExtra("userID", userID);
         intent.putExtra("FROM_ACTIVITY", "MAIN");
         intent.putExtra("filename",filename);

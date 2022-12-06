@@ -37,6 +37,7 @@ public class EditRecipeListActivity extends AppCompatActivity {
     String FROM_ACTIVITY;
     ArrayList<String> food_list;
     String recipeNameToRemove;
+    int isSamePortions;
 
 
     List<String>recipe_list = Arrays.asList
@@ -309,6 +310,7 @@ public class EditRecipeListActivity extends AppCompatActivity {
         dishType = intent.getStringExtra("dishType");
         recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
         recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+        isSamePortions = intent.getIntExtra("isSamePortions", 0);
 
         FROM_ACTIVITY = intent.getStringExtra("FROM_ACTIVITY");
         filename = intent.getStringExtra("filename");
@@ -638,6 +640,7 @@ public class EditRecipeListActivity extends AppCompatActivity {
         intent.putExtra("dishType",dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("recipeNameList", recipeNameList);
+        intent.putExtra("isSamePortions", isSamePortions);
 
         intent.putExtra("filename",filename);
         startActivity(intent);

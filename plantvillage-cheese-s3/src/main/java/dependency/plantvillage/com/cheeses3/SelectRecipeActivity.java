@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,13 +23,13 @@ public class SelectRecipeActivity extends AppCompatActivity {
   List<String> expandableListTitle;
   Map<String, List<String>> expandableListDetail;
   String recipeName;
-
+  String FROM_ACTIVITY;
   ArrayList<String> portion_list;
   ArrayList<Integer> portion_id_list;
   ArrayList<String> recipeCodeList = new ArrayList<>();
   ArrayList<String> recipeNameList = new ArrayList<>();
 
-  int isSamePortion;
+  int isSamePortions;
   int userID;
   String filename = "";
 
@@ -308,9 +309,10 @@ public class SelectRecipeActivity extends AppCompatActivity {
     portion_id_list = intent.getIntegerArrayListExtra("portion_id_list");
     portionID = intent.getIntExtra("portion_id", 1000);
     userID = intent.getIntExtra("userID", 0);
-    isSamePortion = intent.getIntExtra("isSamePortion", isSamePortion);
+    isSamePortions = intent.getIntExtra("isSamePortions", 0);
     recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
     recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+    FROM_ACTIVITY = intent.getStringExtra("FROM_ACTIVITY");
 
     filename = intent.getStringExtra("filename");
     if (filename == null) {
@@ -612,15 +614,23 @@ public class SelectRecipeActivity extends AppCompatActivity {
         recipeNameList.add(recipeName);
         numFoodsInRecipe = numFoodsInRecipe + 1;
         // add recipe code and portionID to filename
+        // if the portionID is the default. then we must be doing a same portions meal so it needs to be updated to whatever the chose portion size is
+        try {
+        if(portionID == 1000 && isSamePortions == 1) {
+          portionID = portion_id_list.get(0);
+        }
+        } catch (Exception e) {
+          e.printStackTrace();
 
+        }
         filename = filename + recipeList.get(recipe_idx) + "-" + portionID + "_";
 
         System.out.println("\n\n\n\nfilename in recipe activity = " + filename);
 
-        if (isSamePortion == 1 ) { // same portion so go to image capture
+        if (isSamePortions == 1 ) { // same portion so go to image capture
           selectAddFoodCapture(v, recipeName, 1);
-        } else if (isSamePortion == 0) {
-          selectPortionSize(v, recipeName, 2); // need to select portion size
+        } else if (isSamePortions == 0) {
+          selectPortionSize(v, recipeName, 0); // need to select portion size
         }
 
 
@@ -629,8 +639,9 @@ public class SelectRecipeActivity extends AppCompatActivity {
     });
   }
 
-  public void selectPortionSize(View view, String recipeName, int isSamePortion) {
+  public void selectPortionSize(View view, String recipeName, int isSamePortions) {
 
+    System.out.println("RECIPE IsSamePortions = " + isSamePortions);
 
     Intent intent = new Intent(this, SelectPortionSizeActivity.class);
 
@@ -639,29 +650,37 @@ public class SelectRecipeActivity extends AppCompatActivity {
     intent.putExtra("food_name", recipeName);
     intent.putExtra("userID", userID);
     intent.putExtra("numFoodsInRecipe", numFoodsInRecipe);
-    intent.putExtra("isSamePortion", isSamePortion);
+    intent.putExtra("isSamePortions", isSamePortions);
     intent.putExtra("recipeCodeList", recipeCodeList);
     intent.putExtra("recipeNameList", recipeNameList);
     intent.putExtra("filename", filename);
+    intent.putExtra("FROM_ACTIVITY", "SELECT_RECIPE");
 
 
     startActivity(intent);
   }
 
-  public void selectAddFoodCapture(View view, String recipeName, int isSamePortion) {
+  public void selectAddFoodCapture(View view, String recipeName, int isSamePortions) {
+    portion_list.add(portion_list.get(0));
+    portion_id_list.add(portion_id_list.get(0));
+
+    // update portion id in filename
+    filename = filename.replace("1000",Integer.toString(portion_id_list.get(0)));
 
     Intent intent;
-    intent = new Intent(this, CaptureImageUploadActivity.class);
+    intent = new Intent(this, CaptureImageUploadImFmActivity.class);
 
     intent.putExtra("portion_list", portion_list);
     intent.putExtra("portion_id_list", portion_id_list);
     intent.putExtra("recipeName", recipeName);
-    intent.putExtra("isSamePortion", isSamePortion);
     intent.putExtra("userID", userID);
     intent.putExtra("portion_id", portionID);
     intent.putExtra("portion_size", portionSize);
     intent.putExtra("recipeCodeList", recipeCodeList);
+    intent.putExtra("recipeNameList", recipeNameList);
     intent.putExtra("filename",filename);
+    intent.putExtra("FROM_ACTIVITY", "SELECT_RECIPE");
+    intent.putExtra("isSamePortions", isSamePortions);
 
 
 
