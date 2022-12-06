@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -96,7 +95,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     String selectedImagePath;
     int picType;
     int userID;
-    int samePortions;
+    int isSamePortions;
     int portionID;
     String portionSize;
     String dishType;
@@ -106,6 +105,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     ArrayList<String> recipeCodeList;
     String filename;
     ArrayList<String> recipeNameList;
+    String FROM_ACTIVITY;
 
 
 
@@ -138,13 +138,14 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         portion_id_list = intent.getIntegerArrayListExtra("portion_id_list");
         picType = intent.getIntExtra("picType", 1);
         userID = intent.getIntExtra("userID", 0);
-        samePortions = intent.getIntExtra("samePortions", 1);
+        isSamePortions = intent.getIntExtra("isSamePortions", 1);
         portionID = intent.getIntExtra("portion_id", 0);
         portionSize = intent.getStringExtra("portion_size");
         dishType = intent.getStringExtra("dishType");
         recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
         filename = intent.getStringExtra("filename");
         recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+        FROM_ACTIVITY = intent.getStringExtra("FROM_ACTIVITY");
 
         System.out.println("\n\n\n\nFilename in Capture IMFM = " + filename);
 
@@ -263,6 +264,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         intent.putExtra("dishType",dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("recipeNameList", recipeNameList);
+        intent.putExtra("isSamePortion", isSamePortions);
 
         intent.putExtra("filename",filename);
         System.out.println("before edit recipe activity. recipeNameList = " + recipeNameList);
@@ -270,17 +272,23 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     }
 
     public void selectFood(View view) {
+        // add extra portion and id for new recipe about to be selected. Extra portion is the same as the 1st one selected cause its same portions
+
+        portion_list.add(portion_list.get(0));
+        portion_id_list.add(portion_id_list.get(0));
+
         Intent intent = new Intent(this, SelectRecipeActivity.class);
 
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
         intent.putExtra("picType", picType);
         intent.putExtra("userID", userID);
-        intent.putExtra("samePortions", samePortions);
         intent.putExtra("dishType", dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("filename",filename);
         intent.putExtra("recipeNameList", recipeNameList);
+        intent.putExtra("isSamePortion", isSamePortions);
+        intent.putExtra("FROM_ACTIVITY", "CAPTURE");
 
         startActivity(intent);
     }
@@ -404,7 +412,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
                         Intent pictureActionIntent = null;
 
                         pictureActionIntent = new Intent(
-                                Intent.ACTION_PICK,
+                                Intent.ACTION_GET_CONTENT,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(
                                 pictureActionIntent,
@@ -510,24 +518,14 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
             if (data != null) {
 
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage, filePath,
-                        null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                selectedImagePath = c.getString(columnIndex);
-                c.close();
-
-                if (selectedImagePath != null) {
-                    //txt_image_path.setText(selectedImagePath);
-
-                }
-                File file = new File(selectedImagePath);
-
-                ImageDecoder.Source source = ImageDecoder.createSource(file);
+                Uri selectedImageUri = data.getData();
+               
                 try {
-                    bitmap = ImageDecoder.decodeBitmap(source);
+                    //bitmap = ImageDecoder.decodeBitmap(source);
+                    bitmap
+                            = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(),
+                            selectedImageUri);
                 } catch (IOException e) {
                     System.out.println("ERROR DECODING DRAWABLE BEFORE SAVE");
                     e.printStackTrace();
