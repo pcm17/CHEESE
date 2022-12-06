@@ -22,172 +22,271 @@ public class SelectRecipeActivity extends AppCompatActivity {
   List<String> expandableListTitle;
   Map<String, List<String>> expandableListDetail;
   String recipeName;
-  ArrayList<String> food_list;
+
   ArrayList<String> portion_list;
-  ArrayList<Integer> food_id_list;
   ArrayList<Integer> portion_id_list;
   ArrayList<String> recipeCodeList = new ArrayList<>();
-  int picType;
+  ArrayList<String> recipeNameList = new ArrayList<>();
+
+  int isSamePortion;
   int userID;
   String filename = "";
 
   int portionID;
   String portionSize;
   int recipe_idx;
-  String dishType;
   List<String>recipe_list = Arrays.asList
-          (//carbs
-                  "Bánh mỳ",
-                  "Bún đậu mắm tôm",
-                  "Cơm rang trứng",
-                  "Miến thịt gà, miền Bắc",
-                  "Mỳ ăn liền nấu trứng",
-                  "Mỳ gạo nấu thịt lợn",
-                  "Phở bò xào",
-                  "Xôi gấc",
-                  "Xôi lạc miền Bắc",
-                  "Xôi ruốc",
-
-                  //proteins
-                  "Cá trắm cỏ kho dưa chua thịt ba chỉ",
-                  "Cánh gà chiên mắm",
-                  "Thịt chân giò lợn, luộc",
-                  "Thịt gà ta nướng",
-                  "Thịt gà ta rang",
-                  "Thịt lợn nửa nạc, nửa mỡ, luộc",
-
-                  // vegetables
-                  "Cá chép om dưa",
-                  "Cải cúc nấu thịt băm",
-                  "Cải xanh luộc",
-                  "Cải xanh nấu canh",
-                  "Canh chua thịt lợn nạc",
-                  "Canh cua mướp, mồng tơi, rau đay",
-                  "Canh riêu cua",
-                  "Khoai tây ninh xương",
-                  "Măng tươi nấu vịt",
-                  "Ngao nấu chua",
-                  "Rau muống xào",
-                  "Rau ngót nấu thịt",
-
-                  // fruit
-                  "Bưởi",
-                  "Cam",
-                  "Dưa hấu",
-                  "Quả thanh long",
-                  "Quít",
-                  "Táo tây",
-
-                  // liquid
-                  "Chè đỗ xanh",
-                  "Chè hạt sen",
-                  "Chè thập cẩm",
-                  "Kem hộp Merino hương dâu",
-                  "Kem que Merino Cacao - Sô cô la",
-                  "Nước mía đá",
-
-                  // snack
-                  "Bánh tráng trộn",
-                  "Khoai lang tẩm bột chiên/rán",
-                  "Sữa chua đánh đá"
+          (       // 1
+                  "BIRIYANI, CHICKEN",
+                  "BREAD, WHITE",
+                  "BUN, CURRANT",
+                  "BUN, FISH",
+                  "BUN, JAM",
+                  "BUN, SEENI",
+                  "BUN, SEENI SAMBOL",
+                  "BURGER, CHICKEN, WITH BUN",
+                  "CHINESE ROLLS, FISH",
+                  "CORN, BOILED",
+                  "CUP CAKE, ICED",
+                  "CUTLET, FISH",
+                  "DONUT",
+                  "FRIED RICE, CHICKEN",
+                  "HOPPERS",
+                  "HOPPERS, EGG",
+                  "HOPPERS, HONEY",
+                  "KOTTU, CHICKEN",
+                  "MACARONI, MIXED WITH VEGETABLES",
+                  "MILK RICE",
+                  "NOODLES, ADDED WITH VEGETABLES",
+                  "NOODLES, PLAIN, BOILED",
+                  "PARATA",
+                  "PASTA, MIXED WITH VEGETABLE",
+                  "PASTRY, VEGETABLE",
+                  "PATTIS, VEGETABLE",
+                  "PITTU, W/ RICE FLOUR",
+                  "PIZZA, WITH CHICKEN TOPPING",
+                  "POPCORN, SALTED",
+                  "RICE, RED, SAMBA, BOILED",
+                  "RICE, WHITE, SAMBA, BOILED",
+                  "ROTI, COCONUT",
+                  "ROTI, EGG",
+                  "ROTI, VEGETABLE",
+                  "SAMAPOSHA/THRIPOSHA, PORRIDGE",
+                  "SAMOSA, VEGETABLE",
+                  "SANDWICH, VEGETABLE",
+                  "STRING HOPPERS, W/ RICE FLOUR",
+                  "THALAPA",
+                  "VIYANA ROLLS",
+                  // 2
+                  "CASSAVA, BOILED",
+                  "CASSAVA, CURRY W/ COCONUT MILK",
+                  "FRENCH FRIES",
+                  "POTATO AND BEANS, CURRY W/ COCONUT MILK",
+                  "POTATO AND CAPSICUM, CURRY W/ COCONUT MILK",
+                  "POTATO AND DRIED FISH, CURRY W/ COCONUT MILK",
+                  "POTATO, CURRY W/ COCONUT MILK",
+                  "POTATO, TEMPERED",
+                  "SWEET POTATO, BOILED",
+                  // 3
+                  "CARROT AND BEANS, BOILED",
+                  "CARROT AND POTATO, CURRY W/ COCONUT MILK",
+                  "CARROT, CURRY W/ COCONUT MILK",
+                  "CARROT, SALAD W/ TOMATO",
+                  "CARROT, SALAD W/SCRAPED COCONUT",
+                  "PUMPKIN, CURRY W/ COCONUT MILK",
+                  "RADDISH, CURRY W/ COCONUT MILK",
+                  "SWEET POTATO, CURRY W/ COCONUT MILK",
+                  // 4
+                  "AMARANTHUS LEAVES (THAMPALA), MALLUM, TEMPERED",
+                  "CABBAGE LEAVES, MALLUM, TEMPERED",
+                  "CABBAGE LEAVES, TEMPERED",
+                  "DRUMSTICK LEAVES, MALLUM, TEMPERED",
+                  "GOTUKOLA, SALAD, RAW",
+                  "GREEN LEAFY VEGETABLE PORRIDGE (KOLA KENDA)",
+                  "KANKUN, TEMPERED",
+                  "KATHURUMURUNGA (AGATI), MALLUM, TEMPERED",
+                  "KATHURUMURUNGA, MALLUM, TEMPERED",
+                  "LEEKS, TEMPERED",
+                  "MUKUNUWENNA, MALLUM, TEMPERED",
+                  "ONION LEAVES, TEMPERED",
+                  "SPINACH, CURRY W/ COCONUT MILK",
+                  // 5
+                  "AMBARELLA, CURRY W/COCONUT MILK",
+                  "ASH PLANTAIN, DEEP FRIED",
+                  "ASH PUMPKING, CURRY W/COCONUT MILK",
+                  "ASHPLANTAIN, CURRY W/COCONUT MILK",
+                  "BEET ROOT, CURRY W/ COCONUT MILK",
+                  "BEET ROOT, TEMPERED",
+                  "BELL PEPPER, GREEN, RAW",
+                  "BITTER GOURD, CURRY W/ COCONUT MILK",
+                  "BITTER GOURD, DEEP FRIED, SALAD",
+                  "BITTER GOURD, TEMPERED",
+                  "BREAD FRUIT, BOILED",
+                  "BREAD FRUIT, CURRY W/ COCONUT MILK",
+                  "BRINJAL AND DRIED FISH, TEMPERED",
+                  "BRINJAL, CURRY W/ COCONUT MILK",
+                  "BRINJAL, MOJU",
+                  "BRINJAL, TEMPERED",
+                  "CABBAGE, CURRY W/ COCONUT MILK",
+                  "CAPSICUM, CURRY W/ COCONUT MILK",
+                  "CAPSICUM, TEMPERED",
+                  "CAULI FLOWER, CURRY W/COCONUT MILK",
+                  "CUCUMBER, CURRY W/ COCONUT MILK",
+                  "CUCUMBER, SALAD W/ TOMATO",
+                  "DRUMSTICK, CURRY W/ COCONUT MILK",
+                  "GREEN EGG PLANT, TEMPERED",
+                  "GREEN EGGPLANT, CURRY W/ COCONUT MILK",
+                  "GREEN SALAD, RAW",
+                  "JACK, BOILED",
+                  "JACK, MALLUM",
+                  "JACKFRUIT, CURRY W/ COCONUT MILK, TEMPERED",
+                  "LADIES FINGERS, CURRY W/ COCONUT MILK",
+                  "LADIES FINGERS, TEMPERED",
+                  "LASIA STEM, CURRY W/COCONUT MILK",
+                  "LEEKS, CURRY W/ COCONUT MILK",
+                  "LONG BEANS, CURRY W/ COCONUT MILK",
+                  "LONG BEANS, TEMPERED",
+                  "LUNU MIRIS (CHILI SAMBOL)",
+                  "MANGO, CURRY W/COCONUT MILK",
+                  "MUSHROOM, CURRY W/ COCONUT MILK",
+                  "MUSHROOM, DEEP FRIED (BATTER FRIED)",
+                  "MUSHROOM, TEMPERED",
+                  "ONION, SAMBOL, TEMPERED",
+                  "PLANTAIN FLOWER, CURRY W/ COCONUT MILK",
+                  "PLANTAIN STEM, CURRY W/ COCONUT MILK",
+                  "RIDGE GOURD, CURRY W/ COCONUT MILK",
+                  "SAAMBAR",
+                  "SALAD LEAVES, RAW",
+                  "SNAKE GOURD, CURRY W/ COCONUT MILK",
+                  "SPINY GOURD, CURRY W/COCONUT MILK",
+                  "TENDER JACK FRUIT (POLOS), CURRY W/ COCONUT MILK",
+                  "TENDER JACKFRUIT (POLOS), MALLUM",
+                  "TURKEY BERRY, MALLUM, TEMPERED",
+                  "WINGED BEANS, CURRY W/ COCONUT MILK",
+                  "WINGED BEANS, TEMPERED",
+                  // 6
+                  "MANGO, KARTHAKOLOMBAN, RAW",
+                  "MANGO, RIPE, RAW",
+                  "ORANGES",
+                  "PAPAYA, RIPE",
+                  "PASSION FRUIT, RAW",
+                  "PINEAPPLE, RAW",
+                  "STAR FRUIT, RAW",
+                  // 7
+                  "AMBARELLA, RAW",
+                  "APPLE, BIG, RAW",
+                  "AVACADO",
+                  "BANANA, AMBUL, RAW",
+                  "BANANA, ANAMALU, RAW",
+                  "BANANA, CAVENDISH, RAW",
+                  "CEYLON OLIVES, RAW",
+                  "CUSTARD APPLE, RAW",
+                  "DATES, DRY, PALE BROWN, RAW",
+                  "GOOSEBERRY, RAW",
+                  "GRAPES, SEEDED, ROUND, BLACK, RAW",
+                  "GUAVA, LARGE (KILO PERA), RAW",
+                  "GUAVA, RAW",
+                  "JACK FRUIT, RIPE, RAW",
+                  "MANGOSTEEN, RAW",
+                  "POMEGRANATE, RAW",
+                  "POMELO, RAW",
+                  "RAMBUTAN, RAW",
+                  "WATER MELON, DARK GREEN, RAW",
+                  "WOODAPPLE, RAW",
+                  // 8
+                  "HAM, ADDED WITH ONION, TEMPERED",
+                  "MEATBALLS, ADDED WITH ONION, TEMPERED",
+                  "MEATBALLS, CURRY W/COCONUT MILK",
+                  "SAUSAGES, ADDED WITH ONION, TEMPERED",
+                  "SAUSAGES, STIR FRIED",
+                  // 9
+                  "BEEF, CURRY W/O COCONUT MILK",
+                  "BEEF, STIR FRIED",
+                  "CHICKEN, CURRY W/ COCONUT MILK",
+                  "CHICKEN, CURRY W/O COCONUT MILK",
+                  "CHICKEN, DEEP FRIED",
+                  "CHICKEN, TEMPERED",
+                  "PORK, CURRY W/O COCONUT MILK",
+                  "PORK, STIR FRIED",
+                  // 10
+                  "EGG, POULTRY, FRIED",
+                  "EGG, POULTRY, OMLET",
+                  "EGG, POULTRY, WHOLE, BOILED",
+                  "EGG, WHOLE, BOILED & TEMPERED, W/ COCONUT MILK",
+                  // 11
+                  "CANNED FISH, CURRY W/ COCONUT MILK, TEMPERED",
+                  "CUTTLE FISH, ADDED WITH ONION, TEMPERED",
+                  "CUTTLE FISH, CURRY W/ COCONUT MILK",
+                  "CUTTLE FISH, CURRY W/COCONUT MILK",
+                  "DRIED SKIPJACK TUNA (BALAYA) AND LEEKS, TEMPERED",
+                  "HURULLA, ADDED WITH ONION, TEMPERED",
+                  "HURULLA, CURRY W/COCONUT MILK, TEMPERED",
+                  "MACKEREL, ADDED WITH ONION, TEMPERED",
+                  "MACKEREL, CURRY W/ COCONUT MILK, TEMPERED",
+                  "PRAWNS, ADDED WITH ONION, TEMPERED",
+                  "PRAWNS, CURRY W/ COCONUT MILK, TEMPERED",
+                  "SAIL FISH (THALAPATH), DEEP FRIED",
+                  "SALAYA, ADDED WITH ONION, TEMPERED",
+                  "SALAYA, CURRY W/ COCONUT MILK, TEMPERED",
+                  "SALAYA, DRIED, CURRY W/ COCONUT MILK, TEMPERED",
+                  "SKIPJACK TUNA (BALAYA), DRIED, CURRY W/ COCONUT MILK",
+                  "SKIPJACK TUNA (BALAYA), DRIED, DEEP FRIED",
+                  "SKIPJACK TUNA (BALAYA), DRIED, DEEP FRIED",
+                  "SMOOTHBELLY SARDINELLA (KEERAMIN), DRIED, DEEP FRIED",
+                  "SPRATS, DRIED, ADDED WITH ONION, TEMPERED",
+                  "SPRATS, DRIED, CURRY, W/ COCONUT MILK",
+                  "SPRATS, DRIED, DEEP FRIED",
+                  "SPRATS, FRESH, CURRY W/COCONUT MILK, TEMPERED",
+                  "THILAPIA, CURRY W/ COCONUT MILK",
+                  "THILAPIA, DEEP FRIED",
+                  "TUNA (KELAWALLA), CURRY W/O COCONUT MILK",
+                  "TUNA (KELAWALLA), DEEP FRIED",
+                  // 12
+                  "BEANS, CURRY W/COCONUT MILK",
+                  "BEANS, TEMPERED",
+                  "BENGAL GRAM, CURRY W/COCONUT MILK",
+                  "CASHEW NUT, ROASTED",
+                  "CASHEW, CURRY W/COCONUT MILK",
+                  "CHICKPEA, BOILED",
+                  "CHICKPEA, BOILED AND TEMPERED",
+                  "CHICKPEA, CURRY W/ COCONUT MILK",
+                  "COCONUT SAMBOL",
+                  "COCONUT SCRAPING, FRESH",
+                  "COCONUT WATER",
+                  "COWPEA, BOILED",
+                  "COWPEA, CURRY W/ COCONUT MILK",
+                  "COWPEA, CURRY W/ COCONUT MILK, TEMPERED",
+                  "DHAL AND DRIED FISH, CURRY W/ COCONUT MILK",
+                  "DHAL AND SPINACH, CURRY W/ COCONUT MILK",
+                  "DHAL, CURRY W/ COCONUT MILK",
+                  "DOSA/THOSE",
+                  "GREEN GRAM, BOILED",
+                  "GREEN GRAM, CURRY W/ COCONUT MILK",
+                  "GREEN GRAM, CURRY W/ COCONUT MILK, TEMPERED",
+                  "IDLI",
+                  "JACK SEEDS, CURRY W/COCONUT MILK",
+                  "KIRI HODI",
+                  "PAPADUM, FRIED",
+                  "PEANUTS, DRY, ROASTED",
+                  "SOYA MEAT AND POTATO, CURRY W/ COCONUT MILK, TEMPERED",
+                  "SOYA MEAT, CURRY W/ COCONUT MILK",
+                  "SOYA MEAT, TEMPERED",
+                  "UPPUMA",
+                  "WADE, DHAL",
+                  "WADE, ULUNDU",
+                  // 15
+                  "AGGALA, RICE FLOUR",
+                  "CAKE, CHOCOLATE",
+                  "CAKE, CHOCOLATE, ICING",
+                  "CAKE, FRUIT",
+                  "CAKE, SPONGE",
+                  "LAWARIYA",
+                  "WATALAPPAN",
+                  // 16
+                  "CHILI PASTE",
+                  "CHUTNEY, MANGO"
                   );
 
-
-
-
-
-
-
-
-  ArrayList<String> recipeFoodsList1 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList2 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList3 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList4 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList5 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList6 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList7 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList8 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList9 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList10 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList11 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList12 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList13 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList14 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList15 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList16 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList17 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList18 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList19 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList20 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList21 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList22 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList23 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList24 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList25 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList26 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList27 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList28 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList29 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList30 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList31 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList32 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList33 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList34 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList35 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList36 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList37 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList38 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList39 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList40 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList41 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList42 = new ArrayList<String>();
-  ArrayList<String> recipeFoodsList43 = new ArrayList<String>();
-
-
-
-  ArrayList<Integer> recipeFoodIDsList1 = new ArrayList<>();
-  ArrayList<Integer> recipeFoodIDsList2 = new ArrayList<>();
-  ArrayList<Integer> recipeFoodIDsList3 = new ArrayList<>();
-  ArrayList<Integer> recipeFoodIDsList4 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList5 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList6 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList7 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList8 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList9 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList10 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList11 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList12 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList13 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList14 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList15 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList16 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList17 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList18 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList19 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList20 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList21 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList22 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList23 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList24 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList25 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList26 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList27 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList28 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList29 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList30 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList31 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList32 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList33 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList34 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList35 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList36 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList37 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList38 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList39 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList40 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList41 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList42 = new ArrayList<Integer>();
-  ArrayList<Integer> recipeFoodIDsList43 = new ArrayList<Integer>();
 
 
 
@@ -195,8 +294,6 @@ public class SelectRecipeActivity extends AppCompatActivity {
   int outerIndex;
   int numFoodsInRecipe;
 
-  ArrayList<ArrayList<String> > vietnam_foods_list_of_lists = new ArrayList<ArrayList<String> >(n);
-  ArrayList<ArrayList<Integer> > vietnam_food_ids_list_of_lists = new ArrayList<>(n);
   ArrayList<String> recipeList = new ArrayList<>();
 
 
@@ -206,15 +303,15 @@ public class SelectRecipeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_select_recipe);
     Intent intent=getIntent();
-    food_list = intent.getStringArrayListExtra("food_list");
-    food_id_list = intent.getIntegerArrayListExtra("food_id_list");
+
     portion_list = intent.getStringArrayListExtra("portion_list");
     portion_id_list = intent.getIntegerArrayListExtra("portion_id_list");
     portionID = intent.getIntExtra("portion_id", 1000);
-    picType = intent.getIntExtra("picType", 0);
     userID = intent.getIntExtra("userID", 0);
-    dishType = intent.getStringExtra("dishType");
+    isSamePortion = intent.getIntExtra("isSamePortion", isSamePortion);
     recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
+    recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+
     filename = intent.getStringExtra("filename");
     if (filename == null) {
       filename = "";
@@ -223,246 +320,258 @@ public class SelectRecipeActivity extends AppCompatActivity {
       recipeCodeList = new ArrayList<String>();
     }
 
-    recipeFoodsList1.add("Bánh mỳ không"); recipeFoodIDsList1.add(23);
-
-    recipeFoodsList2.add("Bún"); recipeFoodIDsList2.add(8);
-    recipeFoodsList2.add("Chả lợn"); recipeFoodIDsList2.add(31);
-    recipeFoodsList2.add("Đậu phụ"); recipeFoodIDsList2.add(56);
-    recipeFoodsList2.add("Lòng lợn"); recipeFoodIDsList2.add(37);
-    recipeFoodsList2.add("Mắm tôm loãng"); recipeFoodIDsList2.add(271);
-    recipeFoodsList2.add("Khác"); recipeFoodIDsList2.add(2);
-    recipeFoodsList2.add("Sà lách"); recipeFoodIDsList2.add(81);
-    recipeFoodsList2.add("Thịt lợn"); recipeFoodIDsList2.add(245);
-
-    recipeFoodsList3.add("Cơm rang"); recipeFoodIDsList3.add(4);
-    recipeFoodsList3.add("Trứng"); recipeFoodIDsList3.add(256);
-
-    recipeFoodsList4.add("Miến "); recipeFoodIDsList4.add(10);
-    recipeFoodsList4.add("Hành lá"); recipeFoodIDsList4.add(89);
-    recipeFoodsList4.add("Nước dùng từ thịt/cá"); recipeFoodIDsList4.add(124);
-    recipeFoodsList4.add("Thịt gà"); recipeFoodIDsList4.add(244);
-
-    recipeFoodsList5.add("Mỳ  ăn liền"); recipeFoodIDsList5.add(12);
-    recipeFoodsList5.add("Hành lá "); recipeFoodIDsList5.add(89);
-    recipeFoodsList5.add("Nước dùng từ thịt/cá"); recipeFoodIDsList5.add(124);
-    recipeFoodsList5.add("Trứng"); recipeFoodIDsList5.add(256);
-
-    recipeFoodsList6.add("Cà chua"); recipeFoodIDsList6.add(79);
-    recipeFoodsList6.add("Hành lá"); recipeFoodIDsList6.add(89);
-    recipeFoodsList6.add("Nước dùng từ thịt/cá"); recipeFoodIDsList6.add(124);
-    recipeFoodsList6.add("Mỳ gạo"); recipeFoodIDsList6.add(227);
-    recipeFoodsList6.add("Thịt lợn"); recipeFoodIDsList6.add(245);
-
-    recipeFoodsList7.add("Bánh phở"); recipeFoodIDsList7.add(6);
-    recipeFoodsList7.add("Thịt bò "); recipeFoodIDsList7.add(38);
-    recipeFoodsList7.add("Cải xanh"); recipeFoodIDsList7.add(70);
-    recipeFoodsList7.add("Cà chua"); recipeFoodIDsList7.add(79);
-
-    recipeFoodsList8.add("Xôi gấc"); recipeFoodIDsList8.add(262);
-
-    recipeFoodsList9.add("Lạc"); recipeFoodIDsList9.add(59);
-    recipeFoodsList9.add("Xôi trắng"); recipeFoodIDsList9.add(263);
-
-    recipeFoodsList10.add("Xôi trắng"); recipeFoodIDsList10.add(263);
-    recipeFoodsList10.add("Ruốc lợn "); recipeFoodIDsList10.add(146);
-
-    recipeFoodsList11.add("Dưa cải bẹ"); recipeFoodIDsList11.add(88);
-    recipeFoodsList11.add("Cá"); recipeFoodIDsList11.add(199);
-    recipeFoodsList11.add("Thịt lợn"); recipeFoodIDsList11.add(245);
-
-    recipeFoodsList12.add("Cánh gà"); recipeFoodIDsList12.add(202);
-    recipeFoodsList12.add("Tỏi"); recipeFoodIDsList12.add(249);
-
-    recipeFoodsList13.add("Thịt lợn"); recipeFoodIDsList13.add(245);
-
-    recipeFoodsList14.add("Thịt gà"); recipeFoodIDsList14.add(244);
-
-    recipeFoodsList15.add("Khác"); recipeFoodIDsList15.add(2);
-    recipeFoodsList15.add("Thịt gà"); recipeFoodIDsList15.add(244);
-
-    recipeFoodsList16.add("Thịt lợn"); recipeFoodIDsList16.add(245);
-
-    recipeFoodsList17.add("Cá"); recipeFoodIDsList17.add(199);
-    recipeFoodsList17.add("Cà chua"); recipeFoodIDsList17.add(79);
-    recipeFoodsList17.add("Dưa cải bẹ"); recipeFoodIDsList17.add(88);
-    recipeFoodsList17.add("Hành lá"); recipeFoodIDsList17.add(89);
-    recipeFoodsList17.add("Nước dùng từ thịt/cá"); recipeFoodIDsList17.add(124);
-    recipeFoodsList17.add("Khác"); recipeFoodIDsList17.add(2);
-
-    recipeFoodsList18.add("Nước dùng từ thịt/cá"); recipeFoodIDsList18.add(124);
-    recipeFoodsList18.add("Cải cúc"); recipeFoodIDsList18.add(130);
-    recipeFoodsList18.add("Thịt lợn"); recipeFoodIDsList18.add(245);
-
-    // mustard greens - left out of march9_2022 sheet
-    recipeFoodsList19.add("Cải xanh"); recipeFoodIDsList19.add(70);
-
-    recipeFoodsList20.add("Cải xanh"); recipeFoodIDsList20.add(70);
-    recipeFoodsList20.add("Nước canh (từ rau củ)"); recipeFoodIDsList20.add(123);
-
-    recipeFoodsList21.add("Cà chua"); recipeFoodIDsList21.add(79);
-    recipeFoodsList21.add("Hành lá "); recipeFoodIDsList21.add(89);
-    recipeFoodsList21.add("Dứa"); recipeFoodIDsList21.add(94);
-    recipeFoodsList21.add("Nước dùng từ thịt/cá"); recipeFoodIDsList21.add(124);
-    recipeFoodsList21.add("Thịt lợn"); recipeFoodIDsList21.add(245);
-
-    recipeFoodsList22.add("Rau mồng tơi"); recipeFoodIDsList22.add(78);
-    recipeFoodsList22.add("Nước dùng từ thịt/cá"); recipeFoodIDsList22.add(124);
-    recipeFoodsList22.add("Mướp"); recipeFoodIDsList22.add(134);
-    recipeFoodsList22.add("Cua"); recipeFoodIDsList22.add(147);
-
-    recipeFoodsList23.add("Cà chua"); recipeFoodIDsList23.add(79);
-    recipeFoodsList23.add("Hành lá"); recipeFoodIDsList23.add(89);
-    recipeFoodsList23.add("Nước dùng từ thịt/cá"); recipeFoodIDsList23.add(124);
-    recipeFoodsList23.add("Cua"); recipeFoodIDsList23.add(147);
-    recipeFoodsList24.add("Khoai tây"); recipeFoodIDsList24.add(15);
-    recipeFoodsList24.add("Xương "); recipeFoodIDsList24.add(36);
-    recipeFoodsList24.add("Hành lá"); recipeFoodIDsList24.add(89);
-    recipeFoodsList24.add("Nước dùng từ thịt/cá"); recipeFoodIDsList24.add(124);
-    recipeFoodsList25.add("Hành lá"); recipeFoodIDsList25.add(89);
-    recipeFoodsList25.add("Măng"); recipeFoodIDsList25.add(80);
-    recipeFoodsList25.add("Nước dùng từ thịt/cá"); recipeFoodIDsList25.add(124);
-    recipeFoodsList25.add("Thịt vịt"); recipeFoodIDsList25.add(248);
-    recipeFoodsList26.add("Khác"); recipeFoodIDsList26.add(2);
-    recipeFoodsList26.add("Ngao"); recipeFoodIDsList26.add(60);
-    recipeFoodsList26.add("Cà chua"); recipeFoodIDsList26.add(79);
-    recipeFoodsList26.add("Hành lá "); recipeFoodIDsList26.add(89);
-    recipeFoodsList26.add("Nước dùng từ thịt/cá"); recipeFoodIDsList26.add(124);
-    recipeFoodsList27.add("Rau muống"); recipeFoodIDsList27.add(73);
-    recipeFoodsList27.add("Tỏi"); recipeFoodIDsList27.add(249);
-    recipeFoodsList28.add("Rau ngót"); recipeFoodIDsList28.add(83);
-    recipeFoodsList28.add("Nước dùng từ thịt/cá"); recipeFoodIDsList28.add(124);
-    recipeFoodsList28.add("Thịt lợn"); recipeFoodIDsList28.add(245);
-
-    recipeFoodsList29.add("Bưởi"); recipeFoodIDsList29.add(95);
-    recipeFoodsList30.add("Cam"); recipeFoodIDsList30.add(91);
-    recipeFoodsList31.add("Dưa hấu"); recipeFoodIDsList31.add(93);
-    recipeFoodsList32.add("Thanh long"); recipeFoodIDsList32.add(169);
-    recipeFoodsList33.add("Quít"); recipeFoodIDsList33.add(235);
-    recipeFoodsList34.add("Táo tây"); recipeFoodIDsList34.add(96);
-
-    recipeFoodsList35.add("Chè đỗ xanh"); recipeFoodIDsList35.add(142);
-    recipeFoodsList36.add("Chè hạt sen"); recipeFoodIDsList36.add(217);
-    recipeFoodsList37.add("Chè thập cẩm"); recipeFoodIDsList37.add(105);
-    recipeFoodsList38.add("Kem"); recipeFoodIDsList38.add(107);
-    recipeFoodsList39.add("Kem"); recipeFoodIDsList39.add(107);
-    recipeFoodsList40.add("Nước mía đá"); recipeFoodIDsList40.add(232);
-
-    recipeFoodsList41.add("Bánh tráng trộn"); recipeFoodIDsList41.add(117);
-    recipeFoodsList42.add("Bánh khoai"); recipeFoodIDsList42.add(192);
-    recipeFoodsList43.add("Sữa chua đánh đá"); recipeFoodIDsList43.add(237);
-
-
-
-
-
-    //Populate list of list of food ids
-    vietnam_foods_list_of_lists.add(recipeFoodsList1);    vietnam_foods_list_of_lists.add(recipeFoodsList2);
-    vietnam_foods_list_of_lists.add(recipeFoodsList3);    vietnam_foods_list_of_lists.add(recipeFoodsList4);
-    vietnam_foods_list_of_lists.add(recipeFoodsList5);    vietnam_foods_list_of_lists.add(recipeFoodsList6);
-    vietnam_foods_list_of_lists.add(recipeFoodsList7);    vietnam_foods_list_of_lists.add(recipeFoodsList8);
-    vietnam_foods_list_of_lists.add(recipeFoodsList9);    vietnam_foods_list_of_lists.add(recipeFoodsList10);
-    vietnam_foods_list_of_lists.add(recipeFoodsList11);    vietnam_foods_list_of_lists.add(recipeFoodsList12);
-    vietnam_foods_list_of_lists.add(recipeFoodsList13);    vietnam_foods_list_of_lists.add(recipeFoodsList14);
-    vietnam_foods_list_of_lists.add(recipeFoodsList15);    vietnam_foods_list_of_lists.add(recipeFoodsList16);
-    vietnam_foods_list_of_lists.add(recipeFoodsList17);    vietnam_foods_list_of_lists.add(recipeFoodsList18);
-    vietnam_foods_list_of_lists.add(recipeFoodsList19);    vietnam_foods_list_of_lists.add(recipeFoodsList20);
-    vietnam_foods_list_of_lists.add(recipeFoodsList21);    vietnam_foods_list_of_lists.add(recipeFoodsList22);
-    vietnam_foods_list_of_lists.add(recipeFoodsList23);    vietnam_foods_list_of_lists.add(recipeFoodsList24);
-    vietnam_foods_list_of_lists.add(recipeFoodsList25);    vietnam_foods_list_of_lists.add(recipeFoodsList26);
-    vietnam_foods_list_of_lists.add(recipeFoodsList27);    vietnam_foods_list_of_lists.add(recipeFoodsList28);
-    vietnam_foods_list_of_lists.add(recipeFoodsList29);    vietnam_foods_list_of_lists.add(recipeFoodsList30);
-    vietnam_foods_list_of_lists.add(recipeFoodsList31);    vietnam_foods_list_of_lists.add(recipeFoodsList32);
-    vietnam_foods_list_of_lists.add(recipeFoodsList33);    vietnam_foods_list_of_lists.add(recipeFoodsList34);
-    vietnam_foods_list_of_lists.add(recipeFoodsList35);    vietnam_foods_list_of_lists.add(recipeFoodsList36);
-    vietnam_foods_list_of_lists.add(recipeFoodsList37);    vietnam_foods_list_of_lists.add(recipeFoodsList38);
-    vietnam_foods_list_of_lists.add(recipeFoodsList39);    vietnam_foods_list_of_lists.add(recipeFoodsList40);
-    vietnam_foods_list_of_lists.add(recipeFoodsList41);    vietnam_foods_list_of_lists.add(recipeFoodsList42);
-    vietnam_foods_list_of_lists.add(recipeFoodsList43);
-
-
-
-
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList1);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList2);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList3);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList4);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList5);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList6);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList7);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList8);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList9);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList10);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList11);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList12);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList13);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList14);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList15);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList16);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList17);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList18);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList19);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList20);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList21);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList22);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList23);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList24);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList25);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList26);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList27);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList28);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList29);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList30);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList31);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList32);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList33);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList34);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList35);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList36);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList37);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList38);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList39);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList40);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList41);    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList42);
-    vietnam_food_ids_list_of_lists.add(recipeFoodIDsList43);
-
-
-
-    //carbs
-    recipeList.add("250");
-    recipeList.add("214");
-    recipeList.add("215");
+    if (recipeNameList == null) {
+      recipeNameList = new ArrayList<String>();
+    }
+    // 1
+    recipeList.add("1");
+    recipeList.add("2");
+    recipeList.add("3");
+    recipeList.add("4");
+    recipeList.add("5");
+    recipeList.add("6");
+    recipeList.add("7");
+    recipeList.add("8");
+    recipeList.add("9");
+    recipeList.add("10");
     recipeList.add("11");
     recipeList.add("12");
+    recipeList.add("13");
     recipeList.add("14");
+    recipeList.add("15");
+    recipeList.add("16");
     recipeList.add("17");
+    recipeList.add("18");
+    recipeList.add("19");
+    recipeList.add("20");
     recipeList.add("21");
     recipeList.add("22");
-    recipeList.add("245");
-
-    //protein
+    recipeList.add("23");
+    recipeList.add("24");
+    recipeList.add("25");
+    recipeList.add("26");
+    recipeList.add("27");
+    recipeList.add("28");
+    recipeList.add("29");
+    recipeList.add("30");
+    recipeList.add("31");
+    recipeList.add("32");
+    recipeList.add("33");
     recipeList.add("34");
+    recipeList.add("35");
     recipeList.add("36");
+    recipeList.add("37");
+    recipeList.add("38");
+    recipeList.add("39");
+    recipeList.add("40");
+    // 2
+    recipeList.add("41");
+    recipeList.add("42");
+    recipeList.add("43");
+    recipeList.add("44");
+    recipeList.add("45");
+    recipeList.add("46");
+    recipeList.add("47");
+    recipeList.add("48");
+    recipeList.add("49");
+    // 3
+    recipeList.add("50");
+    recipeList.add("51");
+    recipeList.add("52");
+    recipeList.add("53");
+    recipeList.add("54");
+    recipeList.add("55");
+    recipeList.add("56");
+    recipeList.add("57");
+    // 4
+    recipeList.add("58");
+    recipeList.add("59");
+    recipeList.add("60");
+    recipeList.add("61");
     recipeList.add("62");
+    recipeList.add("63");
+    recipeList.add("64");
+    recipeList.add("65");
+    recipeList.add("66");
+    recipeList.add("67");
+    recipeList.add("68");
     recipeList.add("69");
     recipeList.add("70");
+    // 5
+    recipeList.add("71");
+    recipeList.add("72");
+    recipeList.add("73");
+    recipeList.add("74");
+    recipeList.add("75");
+    recipeList.add("76");
+    recipeList.add("77");
+    recipeList.add("78");
+    recipeList.add("79");
+    recipeList.add("80");
+    recipeList.add("81");
+    recipeList.add("82");
+    recipeList.add("83");
     recipeList.add("84");
-
-    //vegetables
-    recipeList.add("228");
+    recipeList.add("85");
+    recipeList.add("86");
+    recipeList.add("87");
+    recipeList.add("88");
+    recipeList.add("89");
+    recipeList.add("90");
+    recipeList.add("91");
+    recipeList.add("92");
+    recipeList.add("93");
+    recipeList.add("94");
+    recipeList.add("95");
+    recipeList.add("96");
+    recipeList.add("97");
+    recipeList.add("98");
+    recipeList.add("99");
+    recipeList.add("100");
+    recipeList.add("101");
+    recipeList.add("102");
+    recipeList.add("103");
+    recipeList.add("104");
+    recipeList.add("105");
+    recipeList.add("106");
+    recipeList.add("107");
+    recipeList.add("108");
     recipeList.add("109");
-    recipeList.add("244");
+    recipeList.add("110");
+    recipeList.add("111");
+    recipeList.add("112");
+    recipeList.add("113");
     recipeList.add("114");
+    recipeList.add("115");
+    recipeList.add("116");
+    recipeList.add("117");
+    recipeList.add("118");
     recipeList.add("119");
     recipeList.add("120");
+    recipeList.add("121");
+    recipeList.add("122");
+    recipeList.add("123");
+    // 6
+    recipeList.add("124");
     recipeList.add("125");
+    recipeList.add("126");
+    recipeList.add("127");
+    recipeList.add("128");
+    recipeList.add("129");
+    recipeList.add("130");
+    // 7
+    recipeList.add("131");
+    recipeList.add("132");
+    recipeList.add("133");
+    recipeList.add("134");
+    recipeList.add("135");
     recipeList.add("136");
-    recipeList.add("235");
+    recipeList.add("137");
+    recipeList.add("138");
+    recipeList.add("139");
+    recipeList.add("140");
+    recipeList.add("141");
+    recipeList.add("142");
+    recipeList.add("143");
     recipeList.add("144");
+    recipeList.add("145");
+    recipeList.add("146");
+    recipeList.add("147");
+    recipeList.add("148");
+    recipeList.add("149");
+    recipeList.add("150");
+    // 8
+    recipeList.add("151");
+    recipeList.add("152");
+    recipeList.add("153");
+    recipeList.add("154");
     recipeList.add("155");
+    recipeList.add("156");
+    // 9
+    recipeList.add("157");
+    recipeList.add("158");
     recipeList.add("159");
-
-    // fruit
-
+    recipeList.add("160");
+    recipeList.add("161");
+    recipeList.add("162");
+    recipeList.add("163");
+    // 10
+    recipeList.add("164");
+    recipeList.add("165");
+    recipeList.add("166");
+    recipeList.add("167");
+    // 11
+    recipeList.add("168");
+    recipeList.add("169");
+    recipeList.add("170");
+    recipeList.add("171");
+    recipeList.add("172");
+    recipeList.add("173");
+    recipeList.add("174");
+    recipeList.add("175");
     recipeList.add("176");
     recipeList.add("177");
+    recipeList.add("178");
+    recipeList.add("179");
+    recipeList.add("180");
+    recipeList.add("181");
+    recipeList.add("182");
     recipeList.add("183");
+    recipeList.add("184");
     recipeList.add("185");
     recipeList.add("186");
     recipeList.add("187");
-
-    // snack
+    recipeList.add("188");
+    recipeList.add("189");
     recipeList.add("190");
     recipeList.add("191");
+    recipeList.add("192");
+    recipeList.add("193");
     recipeList.add("194");
-
-    // liquid
-
+    // 12
+    recipeList.add("195");
+    recipeList.add("196");
+    recipeList.add("197");
+    recipeList.add("198");
+    recipeList.add("199");
+    recipeList.add("200");
     recipeList.add("201");
     recipeList.add("202");
+    recipeList.add("203");
+    recipeList.add("204");
+    recipeList.add("205");
+    recipeList.add("206");
     recipeList.add("207");
     recipeList.add("208");
     recipeList.add("209");
+    recipeList.add("210");
     recipeList.add("211");
+    recipeList.add("212");
+    recipeList.add("213");
+    recipeList.add("214");
+    recipeList.add("215");
+    recipeList.add("216");
+    recipeList.add("217");
+    recipeList.add("218");
+    recipeList.add("219");
+    recipeList.add("220");
+    recipeList.add("221");
+    recipeList.add("222");
+    recipeList.add("223");
+    recipeList.add("224");
+    recipeList.add("225");
+    recipeList.add("226");
+    // 15
+    recipeList.add("227");
+    recipeList.add("228");
+    recipeList.add("229");
+    recipeList.add("230");
+    recipeList.add("231");
+    recipeList.add("232");
+    recipeList.add("233");
+    // 16
+    recipeList.add("234");
+    recipeList.add("235");
 
     expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
     expandableListDetail = ExpandableListDataPump.getData();
@@ -495,82 +604,23 @@ public class SelectRecipeActivity extends AppCompatActivity {
 
         // find index for the foods in this recipe
 
-        /*
-        filename = "";
-        for (int i = 0; i < recipeCodeList.size();i++) {
-          //recipe_idx = recipe_list.indexOf(recipeName);
-          filename = filename + recipeCodeList.get(i) + "-" + portionID + "-";
-          int n = recipeList.indexOf(recipeCodeList.get(i));
-          System.out.println("looking for index for recipe code: " + recipeCodeList.get(i));
-          ArrayList<Integer> foodsToAdd = vietnam_food_ids_list_of_lists.get(n);
-          Collections.sort(foodsToAdd);
-          for (int j = 0;j<foodsToAdd.size();j++){
-            // add food id's for this recipe to the filename
-            if (j < foodsToAdd.size()-1) {
-              filename = filename + foodsToAdd.get(j).toString() + '-';
-            } else {
-              filename = filename + foodsToAdd.get(j).toString() + '_';
-            }
-          }
-        }
-        */
+
         recipe_idx = recipe_list.indexOf(recipeName);
         System.out.println("Recipe name: " + recipeName + " Recipe index: " + recipe_idx);
+        // add recipe code and name to their respective lists
         recipeCodeList.add(recipeList.get(recipe_idx));
+        recipeNameList.add(recipeName);
+        numFoodsInRecipe = numFoodsInRecipe + 1;
         // add recipe code and portionID to filename
 
-        filename = filename + recipeList.get(recipe_idx) + "-" + portionID + "-";
+        filename = filename + recipeList.get(recipe_idx) + "-" + portionID + "_";
 
-        for (int i = 0;i<vietnam_food_ids_list_of_lists.get(recipe_idx).size();i++){
-          // add food id's for this recipe to the filename
-          if (i < vietnam_food_ids_list_of_lists.get(recipe_idx).size()-1) {
-            filename = filename + vietnam_food_ids_list_of_lists.get(recipe_idx).get(i).toString() + '-';
-          } else {
-            filename = filename + vietnam_food_ids_list_of_lists.get(recipe_idx).get(i).toString() + '_';
-
-          }
-        }
         System.out.println("\n\n\n\nfilename in recipe activity = " + filename);
-        // find index for the foods in this recipe
-        for (int i = 0; i < recipe_list.size(); i++) {
-          if (recipe_list.get(i).equals(recipeName)){
-            outerIndex = i;
-          }
-        }
-        Random rnd = new Random();
-        int n;
-        for (int j = 0; j < vietnam_foods_list_of_lists.get(outerIndex).size(); j++) {
 
-          food_list.add(vietnam_foods_list_of_lists.get(outerIndex).get(j));
-          //food_id_list.add(food_id);
-        }
-        ArrayList<Integer> foods_to_add = vietnam_food_ids_list_of_lists.get(outerIndex);
-        String rndNum;
-        String foodID;
-        String uniqueID;
-        int uniqueIDInt;
-        int min = 0;
-        int max = 9;
-        n = rnd.nextInt(max - min + 1) + min;
-        for (int j = 0; j < foods_to_add.size(); j++) {
-          //.makeText(SelectRecipeActivity.this, foods_to_add.get(j), Toast.LENGTH_SHORT).show();
-          //rndNum= String.valueOf(n);
-          //foodID = String.valueOf(foods_to_add.get(j));
-          //uniqueID = rndNum + foodID;
-          //uniqueIDInt = Integer.parseInt(uniqueID);
-          food_id_list.add(foods_to_add.get(j));
-        }
-        numFoodsInRecipe = foods_to_add.size();
-
-
-      //Toast.makeText(SelectRecipeActivity.this, "You've selected " + recipeName, Toast.LENGTH_SHORT).show();
-
-        if (picType == 1 ) { // individual meal
-          selectPlatePortionSize(v, recipeName, 1);
-        } else if (picType == 2) {
-          selectIndividualMealPortionSize(v, recipeName, 2); // individual meal
-        } else {
-          selectMealPortionSize(v, recipeName, 0); // family meal
+        if (isSamePortion == 1 ) { // same portion so go to image capture
+          selectAddFoodCapture(v, recipeName, 1);
+        } else if (isSamePortion == 0) {
+          selectPortionSize(v, recipeName, 2); // need to select portion size
         }
 
 
@@ -579,60 +629,43 @@ public class SelectRecipeActivity extends AppCompatActivity {
     });
   }
 
-  public void selectPlatePortionSize(View view, String food_name, int picType) {
+  public void selectPortionSize(View view, String recipeName, int isSamePortion) {
 
 
-    Intent intent = new Intent(this, SelectPlatePortionSizeActivity.class);
-    intent.putExtra("food_list", food_list);
-    intent.putExtra("food_id_list", food_id_list);
+    Intent intent = new Intent(this, SelectPortionSizeActivity.class);
+
     intent.putExtra("portion_list", portion_list);
     intent.putExtra("portion_id_list", portion_id_list);
-    intent.putExtra("food_name", food_name);
-    intent.putExtra("picType", picType);
+    intent.putExtra("food_name", recipeName);
     intent.putExtra("userID", userID);
     intent.putExtra("numFoodsInRecipe", numFoodsInRecipe);
-    intent.putExtra("dishType", dishType);
+    intent.putExtra("isSamePortion", isSamePortion);
     intent.putExtra("recipeCodeList", recipeCodeList);
+    intent.putExtra("recipeNameList", recipeNameList);
     intent.putExtra("filename", filename);
 
 
     startActivity(intent);
   }
 
-  public void selectIndividualMealPortionSize(View view, String food_name, int picType) {
+  public void selectAddFoodCapture(View view, String recipeName, int isSamePortion) {
 
-    Intent intent = new Intent(this, SelectPlatePortionSizeActivity.class);
-    intent.putExtra("food_list", food_list);
-    intent.putExtra("food_id_list", food_id_list);
+    Intent intent;
+    intent = new Intent(this, CaptureImageUploadActivity.class);
+
     intent.putExtra("portion_list", portion_list);
     intent.putExtra("portion_id_list", portion_id_list);
-    intent.putExtra("food_name", food_name);
-    intent.putExtra("picType", picType);
+    intent.putExtra("recipeName", recipeName);
+    intent.putExtra("isSamePortion", isSamePortion);
     intent.putExtra("userID", userID);
-    intent.putExtra("numFoodsInRecipe", numFoodsInRecipe);
-    intent.putExtra("dishType", dishType);
+    intent.putExtra("portion_id", portionID);
+    intent.putExtra("portion_size", portionSize);
     intent.putExtra("recipeCodeList", recipeCodeList);
-    intent.putExtra("filename", filename);
+    intent.putExtra("filename",filename);
+
 
 
     startActivity(intent);
   }
-  public void selectMealPortionSize(View view, String food_name, int picType) {
 
-    Intent intent = new Intent(this, SelectMealPortionSizeActivity.class);
-    intent.putExtra("food_list", food_list);
-    intent.putExtra("food_id_list", food_id_list);
-    intent.putExtra("portion_list", portion_list);
-    intent.putExtra("portion_id_list", portion_id_list);
-    intent.putExtra("food_name", food_name);
-    intent.putExtra("picType", picType);
-    intent.putExtra("userID", userID);
-    intent.putExtra("numFoodsInRecipe", numFoodsInRecipe);
-    intent.putExtra("dishType", dishType);
-    intent.putExtra("recipeCodeList", recipeCodeList);
-    intent.putExtra("filename", filename);
-
-
-    startActivity(intent);
-  }
 }
