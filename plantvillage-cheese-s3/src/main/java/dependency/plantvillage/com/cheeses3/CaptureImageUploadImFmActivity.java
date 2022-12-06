@@ -316,6 +316,8 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         filename = angle + '_' + thisDate  + "_" + baseFilename;
         filename = filename + userID +  ".jpg";
         filename = filename.replace("__","_");
+        filename = filename.replace("__","_");
+
         return filename;
     }
 
