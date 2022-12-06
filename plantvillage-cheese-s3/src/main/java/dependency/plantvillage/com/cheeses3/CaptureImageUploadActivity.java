@@ -85,7 +85,7 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
     protected static final int GALLERY_PICTURE = 1;
     private Intent pictureActionIntent = null;
     Bitmap bitmap;
-    ArrayList<String> food_list;
+
     ArrayList<String> portion_list;
     ArrayList<Integer> unsorted_food_id_list;
 
@@ -103,6 +103,8 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
     ArrayList<String> portion_food_id_list;
     Boolean imageChosen = false;
     ArrayList<String> recipeCodeList;
+
+    ArrayList<String> recipeNameList;
     String filename;
     boolean imageSaved = false;
 
@@ -130,9 +132,7 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
         //imageView = (ImageView) findViewById(R.id.image);
         //imageView2 = (ImageView) findViewById(R.id.image2);
         portion_size= intent.getStringExtra("portion_size");
-        food_list = intent.getStringArrayListExtra("food_list");
         portion_list = intent.getStringArrayListExtra("portion_list");
-        unsorted_food_id_list = intent.getIntegerArrayListExtra("food_id_list");
         portion_id_list = intent.getIntegerArrayListExtra("portion_id_list");
         picType = intent.getIntExtra("picType", 1);
         userID = intent.getIntExtra("userID", 0);
@@ -141,51 +141,24 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
         portionSize = intent.getStringExtra("portion_size");
         dishType = intent.getStringExtra("dishType");
         recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
+        recipeNameList = intent.getStringArrayListExtra("recipeNameList");
         filename = intent.getStringExtra("filename");
         System.out.println("\n\n\n\nFilename in Capture IP = " +filename);
         System.out.println("Old portion ID = " + portionID);
 
-        portion_food_id_list = new ArrayList<String>(food_list.size()); // Make a new list
+        portion_food_id_list = new ArrayList<String>(recipeCodeList.size()); // Make a new list
 
-        int food_list_length = food_list.size();
+        int food_list_length = recipeCodeList.size();
         if (food_list_length != portion_list.size()) { // Too many names, or too many numbers
 
         }
         System.out.println("portion list length = " + portion_list.size());
-        ArrayList<String> food_and_portion_list = new ArrayList<String>(food_list_length); // Make a new list
-        for (int i = 0; i < food_list_length; i++) { // Loop through every name/phone number combo
-            food_and_portion_list.add(portion_list.get(i)
-                    + " " + food_list.get(i)); // Concat the two, and add it
+        System.out.println("recipe name list = " + recipeNameList);
+        ArrayList<String> recipe_and_portion_list = new ArrayList<String>(food_list_length); // Make a new list
+        for (int i = 0; i < food_list_length; i++) {
+            recipe_and_portion_list.add(portion_list.get(i)
+                    + " " + recipeNameList.get(i)); // Concat the two, and add it
         }
-        int food_and_portion_list_length = food_and_portion_list.size();
-        if (food_and_portion_list_length != unsorted_food_id_list.size()) { // Too many names, or too many numbers
-            // Fail
-        }
-        sorted_food_id_list = unsorted_food_id_list;
-        //Collections.sort(sorted_food_id_list);
-        int i = 0;
-        int j = 0;
-
-        for (i = 0; i < sorted_food_id_list.size(); i++) {
-            sorted_portion_id_list.add(0);
-        }
-        for (j = 0; j < sorted_food_id_list.size(); j++) {
-            for (i = 0; i < sorted_food_id_list.size(); i++) {
-                if(sorted_food_id_list.get(i) == unsorted_food_id_list.get(j)){
-                    sorted_portion_id_list.set(j,portion_id_list.get(i));
-
-                } else {
-                    continue;
-                }
-            }
-
-        }
-
-        for ( i = 0; i < food_list_length; i++) {
-            portion_food_id_list.add(unsorted_food_id_list.get(i)  + "-" + portion_id_list.get(i)); // Concat the two, and add it
-        }
-
-
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         requestForSpecificPermission();
@@ -237,7 +210,7 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
         final ListView listview = (ListView) findViewById(R.id.listview);
 
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, food_and_portion_list);
+                android.R.layout.simple_list_item_1, recipe_and_portion_list);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -250,7 +223,7 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
                         .withEndAction(new Runnable() {
                             @Override
                             public void run() {
-                                food_list.remove(item);
+                                recipeNameList.remove(item);
                                 adapter.notifyDataSetChanged();
                                 view.setAlpha(1);
                             }
@@ -262,14 +235,11 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
 
     }
     public void changePortionKeepFood(View view, int picType) {
-        Intent intent;
+        Intent intent = null;
         if (picType == 1) {
-            intent = new Intent(this, SelectPlateSamePortionSizeActivity.class);
-        } else {
-            intent = new Intent(this, SelectMealSamePortionSizeActivity.class);
+            intent = new Intent(this, SelectSamePortionSizeActivity.class);
         }
-        intent.putExtra("food_list", food_list);
-        intent.putExtra("food_id_list", unsorted_food_id_list);
+
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
         intent.putExtra("picType", picType);
@@ -279,6 +249,8 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
         intent.putExtra("FROM_ACTIVITY", "CAPTURE");
         intent.putExtra("dishType",dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
+        intent.putExtra("recipeNameList", recipeNameList);
+
         intent.putExtra("filename",filename);
 
         startActivity(intent);
@@ -298,100 +270,11 @@ public class CaptureImageUploadActivity extends AppCompatActivity {
         Date todayDate = new Date();
         String thisDate = currentDate.format(todayDate);
         filename = angle + '_' + thisDate  + "_" + baseFilename;
-        filename = filename + dishType+ '_' + userID +  ".jpg";
+        filename = filename + '_' + userID +  ".jpg";
         return filename;
     }
 
-    private void processImageByPath(String path){
 
-        credentials = new BasicAWSCredentials(key, secret);
-        s3 = new AmazonS3Client(credentials);
-        //s3.setEndpoint("http://localhost:9444/s3");
-        //s3.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).disableChunkedEncoding().build());
-        //s3.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).d);
-        transferUtility = new TransferUtility(s3, CaptureImageUploadActivity.this);
-
-        String myJpgPath = path;
-
-
-        Bitmap myBitmap = BitmapFactory.decodeFile(myJpgPath);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        //myBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        //byte[] byteArray = stream.toByteArray();
-
-
-
-        Log.d("PV", myJpgPath);
-
-        File file = new File(myJpgPath);
-
-        //File file1 = new File(myJpgPath);
-
-        if (!file.exists()) {
-            Toast.makeText(CaptureImageUploadActivity.this, "File Not Found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
-        Log.d("PV", file.getAbsolutePath() + " " + file.getName());
-
-        /*
-        String output = new Random().nextInt() + file.getName();
-        final String s3Name;
-        final String bucketName;
-
-
-        bucketName = "nudging/food_atlas/ghana";
-        s3Name = "https://s3.amazonaws.com/nudging/food_atlas/ghana/"+output;
-
-
-        final TransferObserver observer = transferUtility.upload(
-                bucketName,
-                output,
-                file
-        );
-
-
-
-
-
-        observer.setTransferListener(new TransferListener() {
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-
-                if (state.COMPLETED.equals(observer.getState())) {
-                    //num_pics = num_pics + 1;
-                    Toast.makeText(MainActivity.this, "File Upload Complete", Toast.LENGTH_SHORT).show();
-                    new MainActivity.LongOperation().execute(s3Name);
-
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
-                //Toast.makeText(MainActivity.this, "In Progress Changed", Toast.LENGTH_SHORT).show();
-
-                long _bytesCurrent = bytesCurrent;
-                long _bytesTotal = bytesTotal;
-
-                float percentage = ((float) _bytesCurrent / (float) _bytesTotal * 100);
-                Log.d("percentage", "" + percentage);
-                pb.setProgress((int) percentage);
-                _status.setText(percentage + "%");
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-
-                Toast.makeText(MainActivity.this, "" + ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        observer.refresh();
-        */
-
-
-    }
 
     private void startDialog() {
         AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
