@@ -105,6 +105,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
     Boolean imageChosen = false;
     ArrayList<String> recipeCodeList;
     String filename;
+    ArrayList<String> recipeNameList;
 
 
 
@@ -143,37 +144,28 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         dishType = intent.getStringExtra("dishType");
         recipeCodeList = intent.getStringArrayListExtra("recipeCodeList");
         filename = intent.getStringExtra("filename");
+        recipeNameList = intent.getStringArrayListExtra("recipeNameList");
+
         System.out.println("\n\n\n\nFilename in Capture IMFM = " + filename);
 
 
         btn_more_food = (Button) findViewById(R.id.btn_more_food);
 
-        portion_food_id_list = new ArrayList<String>(food_list.size()); // Make a new list
+        portion_food_id_list = new ArrayList<String>(recipeCodeList.size()); // Make a new list
 
-        int food_list_length = food_list.size();
+        int food_list_length = recipeCodeList.size();
         if (food_list_length != portion_list.size()) { // Too many names, or too many numbers
 
         }
         System.out.println("portion list length = " + portion_list.size());
+        System.out.println("recipe name list = " + recipeNameList);
+
         ArrayList<String> food_and_portion_list = new ArrayList<String>(food_list_length); // Make a new list
-        for (int i = 0; i < food_list.size(); i++) { // Loop through every name/phone number combo
+        for (int i = 0; i < recipeCodeList.size(); i++) { // Loop through every name/phone number combo
             food_and_portion_list.add(portion_list.get(i)
-                    + " " + food_list.get(i)); // Concat the two, and add it
+                    + " " + recipeNameList.get(i)); // Concat the two, and add it
         }
-        int food_and_portion_list_length = food_and_portion_list.size();
-        if (food_and_portion_list_length != unsorted_food_id_list.size()) { // Too many names, or too many numbers
-            // Fail
-        }
-        sorted_food_id_list = unsorted_food_id_list;
-        //Collections.sort(sorted_food_id_list);
-        int i = 0;
-        int j = 0;
 
-
-
-        for ( i = 0; i < food_list_length; i++) {
-            portion_food_id_list.add(unsorted_food_id_list.get(i)  + "-" + portion_id_list.get(i)); // Concat the two, and add it
-        }
 
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -270,15 +262,16 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         intent.putExtra("FROM_ACTIVITY", "CAPTURE");
         intent.putExtra("dishType",dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
-        intent.putExtra("filename",filename);
+        intent.putExtra("recipeNameList", recipeNameList);
 
+        intent.putExtra("filename",filename);
+        System.out.println("before edit recipe activity. recipeNameList = " + recipeNameList);
         startActivity(intent);
     }
 
     public void selectFood(View view) {
         Intent intent = new Intent(this, SelectRecipeActivity.class);
-        intent.putExtra("food_list", food_list);
-        intent.putExtra("food_id_list", unsorted_food_id_list);
+
         intent.putExtra("portion_list", portion_list);
         intent.putExtra("portion_id_list", portion_id_list);
         intent.putExtra("picType", picType);
@@ -287,6 +280,8 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         intent.putExtra("dishType", dishType);
         intent.putExtra("recipeCodeList", recipeCodeList);
         intent.putExtra("filename",filename);
+        intent.putExtra("recipeNameList", recipeNameList);
+
         startActivity(intent);
     }
 
@@ -303,7 +298,7 @@ public class CaptureImageUploadImFmActivity extends AppCompatActivity {
         Date todayDate = new Date();
         String thisDate = currentDate.format(todayDate);
         filename = angle + '_' + thisDate  + "_" + baseFilename;
-        filename = filename + dishType+ '_' + userID +  ".jpg";
+        filename = filename + userID +  ".jpg";
         return filename;
     }
 
