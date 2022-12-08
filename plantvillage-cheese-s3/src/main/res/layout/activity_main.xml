@@ -16,7 +16,7 @@
         android:layout_weight="1"
         android:background="@drawable/layout_corners_shape"
         android:visibility="visible"
-        android:textAlignment="center"/>
+        android:textAlignment="center" />
 
 
 
@@ -27,27 +27,23 @@
             android:layout_weight="1"
             android:orientation="vertical">
         <Button
-            android:id="@+id/btn_individual_meal_same_portions"
+            android:id="@+id/btn_meal_same_portions"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/rounded_corners_white_light_blue"
 
             android:layout_weight="1"
-            android:text="Individual Meal\nSame Portions" />
+            android:text="Capture Meal\nSame Portions" />
 
             <Button
-                android:id="@+id/btn_meal_individual"
+                android:id="@+id/btn_meal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corners_dark_blue"
-                android:text="Individual Meal" />
+                android:text="Capture Meal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"/>
+
     </LinearLayout>
 
 
